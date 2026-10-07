@@ -26,6 +26,7 @@ export const handler: Handler = async (event, context) => {
         Key: { id: movieId },
       })
     );
+    console.log("GetCommand Response: ", commandOutput)
     if (!commandOutput.Item) {
       return {
         statusCode: 404,
@@ -47,7 +48,8 @@ export const handler: Handler = async (event, context) => {
       },
       body: JSON.stringify(body),
     };
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.log(JSON.stringify(error));
     return {
       statusCode: 500,

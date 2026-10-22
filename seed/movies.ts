@@ -347,8 +347,5 @@ export const movieCasts: MovieCast[] = [
     actorName: "Joe Bloggs",
     roleName: "Male Character 1",
     roleDescription: "description of character 4",
-  },
-];
-
-
-
+  }
+]

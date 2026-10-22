@@ -81,7 +81,6 @@ export class SimpleAppStack extends cdk.Stack {
       },
     });
 
-    //  Functions .....
     const getMovieCastMembersFn = new lambdanode.NodejsFunction(
       this,
       "GetCastMemberFn",
@@ -93,7 +92,8 @@ export class SimpleAppStack extends cdk.Stack {
         memorySize: 128,
         environment: {
           CAST_TABLE_NAME: movieCastsTable.tableName,
-          REGION: "eu-west-1",
+          MOVIE_TABLE_NAME: moviesTable.tableName,
+          REGION: cdk.Aws.REGION,
         },
       }
     );
@@ -106,6 +106,7 @@ export class SimpleAppStack extends cdk.Stack {
     });
 
     movieCastsTable.grantReadData(getMovieCastMembersFn);
+    moviesTable.grantReadData(getMovieCastMembersFn);
     
     moviesTable.grantReadData(getAllMoviesFn)
 

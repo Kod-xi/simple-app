@@ -4,7 +4,9 @@ import * as lambdanode from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as custom from "aws-cdk-lib/custom-resources"
 import { generateBatch } from '../shared/util';
-import { movies, movieCasts } from "../seed/movies";;
+import { movies, movieCasts } from "../seed/movies";
+import * as apig from "aws-cdk-lib/aws-apigateway";
+
 
 
 import { Construct } from 'constructs';
@@ -123,6 +125,27 @@ export class RestAPIStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, "Simple Function Url", { value: simpleFnURL.url });
     new cdk.CfnOutput(this, "Get All Movies Function Url", { value: getAllMoviesURL.url });
+
+    const api = new apig.RestApi(this, "MoviesAPI", {
+      description: "Movies API",
+      deployOptions: {
+        stageName: "dev",
+      },
+      defaultCorsPreflightOptions: {
+        allowHeaders: ["Content-Type", "X-Amz-Date"],
+        allowMethods: ["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"],
+        allowOrigins: ["*"],
+      },
+    });
+
+    const moviesEndpoint = api.root.addResource("movies");
+    const movieEndpoint = moviesEndpoint.addResource("{movieId}");
+    movieEndpoint.addMethod("GET", new apig.LambdaIntegration(getMovieByIdFn));
+    const movieCastEndpoint = movieEndpoint.addResource("cast");
+    movieCastEndpoint.addMethod(
+      "GET",
+      new apig.LambdaIntegration(getMovieCastMembersFn)
+    );
 
   }
 }

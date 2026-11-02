@@ -2,6 +2,8 @@ import { marshall, marshallOptions, unmarshallOptions } from "@aws-sdk/util-dyna
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { Movie, MovieCast } from "./types";
+import { APIGatewayProxyResult } from "aws-lambda";
+
 
 type Entity = Movie | MovieCast;  // NEW
 export const generateItem = (entity: Entity) => {
@@ -37,11 +39,12 @@ export const response = (
   statusCode: number,
   body: object,
   headers: Record<string, string> = {},
-): Record<string, any> => ({
+): APIGatewayProxyResult => ({
   statusCode,
   headers: { 'content-type': 'application/json', ...headers },
   body: JSON.stringify(body),
 });
+
 
 export const parseId = (value: string | undefined): number | undefined =>
   value !== undefined && /^[1-9]\d*$/.test(value) ? Number(value) : undefined;

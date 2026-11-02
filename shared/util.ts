@@ -42,3 +42,6 @@ export const response = (
   headers: { 'content-type': 'application/json', ...headers },
   body: JSON.stringify(body),
 });
+
+export const parseId = (value: string | undefined): number | undefined =>
+  value !== undefined && /^[1-9]\d*$/.test(value) ? Number(value) : undefined;

@@ -29,10 +29,18 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",
     "cdk.out"
-  ]
+  ],
+  "include": [
+    "bin/**/*.ts",
+    "lib/**/*.ts",
+    "lambdas/**/*.ts",
+    "shared/**/*.ts",
+    "shared/*.json"
+ ],
 }
